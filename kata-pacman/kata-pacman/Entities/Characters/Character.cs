@@ -10,6 +10,7 @@ namespace kata_pacman.Characters
         
         public Character(Coordinate spawnPosition, Direction spawnDirection, BoardState boardState)
         {
+            Alive = true;
             Position = spawnPosition;
             Direction = spawnDirection;
             BoardState = boardState;

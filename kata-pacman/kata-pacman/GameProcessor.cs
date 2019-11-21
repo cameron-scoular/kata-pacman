@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 
 namespace kata_pacman
@@ -35,7 +36,6 @@ namespace kata_pacman
             while (true)
             {
                 var latestInputKey = GameInputThreadProcessor.LatestCharacterInput;
-
                 if (latestInputKey != null)
                 {
                     GameState.PlayableCharacter.HandleInputTurn((CharacterInput) latestInputKey);

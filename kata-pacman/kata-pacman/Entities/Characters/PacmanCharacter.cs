@@ -24,6 +24,7 @@ namespace kata_pacman.Characters
             if (adjacentGameObject.Passable) // If the adjacent space is passable, then the new direction is valid
             {
                 Direction = newDirection;
+                RenderSymbol = GetRenderSymbolFromDirection(Direction);
                 return true;
             }
 

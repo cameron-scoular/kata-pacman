@@ -47,13 +47,13 @@ namespace kata_pacman
             switch (direction)
             {
                 case Direction.North:
-                    return Board[position.XPos, position.YPos + 1];
-                case Direction.East:
-                    return Board[position.XPos + 1, position.YPos];
-                case Direction.South:
-                    return Board[position.XPos, position.YPos - 1];
-                case Direction.West:
                     return Board[position.XPos - 1, position.YPos];
+                case Direction.East:
+                    return Board[position.XPos, position.YPos + 1];
+                case Direction.South:
+                    return Board[position.XPos + 1, position.YPos];
+                case Direction.West:
+                    return Board[position.XPos, position.YPos - 1];
             }
 
             return null;
