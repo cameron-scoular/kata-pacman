@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace kata_pacman
 {
@@ -6,12 +7,14 @@ namespace kata_pacman
     {
         static void Main(string[] args)
         {
+            var gameInputMediator = new GameInputThreadProcessor();
             
             var displayer = new ConsoleBoardDisplayer();
+
+            var gameProcessor = new GameProcessor(displayer, gameInputMediator, 500);
             
-            displayer.DisplayConsoleBoard(new GameState());
-            
-            
+            gameProcessor.RunGame();
+
         }
     }
 }

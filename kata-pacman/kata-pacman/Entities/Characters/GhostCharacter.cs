@@ -5,7 +5,7 @@ namespace kata_pacman.Characters
     public class GhostCharacter : Character
     {
 
-        public GhostCharacter(Coordinate spawnPosition, Direction spawnDirection) : base(spawnPosition, spawnDirection)
+        public GhostCharacter(Coordinate spawnPosition, Direction spawnDirection, BoardState boardState) : base(spawnPosition, spawnDirection, boardState)
         {
             Position = spawnPosition;
             Direction = spawnDirection;

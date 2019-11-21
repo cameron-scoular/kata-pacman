@@ -8,8 +8,8 @@ namespace kata_pacman
             YPos = y;
         }
         
-        int XPos { get; set; }
-        
-        int YPos { get; set; }
+        public int XPos { get; }
+
+        public int YPos { get; }
     }
 }
