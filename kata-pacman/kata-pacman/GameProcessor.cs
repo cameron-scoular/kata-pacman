@@ -47,6 +47,9 @@ namespace kata_pacman
                     
                 ProcessCharacterMovement();
                 
+                ConsoleBoardDisplayer.DisplayConsoleBoard(GameState);
+                Thread.Sleep(TickPeriod/GameState.GameCharacterSet.Count); // Wait for tick period, with tick waiting period being allocated equally amongst characters
+
             }
             
         }
@@ -104,26 +107,29 @@ namespace kata_pacman
                         // Removing the old board character reference
                         GameState.BoardState.GetBoardGameObjectReference(originalPosition).CharacterOnGameObject = null;
 
-                        if (adjacentGameObject is DotGameObject && character is PacmanCharacter
-                        ) // If pacman moves onto a dot, eat it
-                        {
-                            GameState.BoardState.GetBoardGameObjectReference(adjacentGameObject.Position) =
-                                new EmptySpaceGameObject((DotGameObject) adjacentGameObject);
-                            GameState.Score++;
-                        }
+                        CharacterEatDotCheck(adjacentGameObject, character);
 
                     }
                 }
 
-                ConsoleBoardDisplayer.DisplayConsoleBoard(GameState);
-                Thread.Sleep(TickPeriod/GameState.GameCharacterSet.Count); // Wait for tick period, with tick waiting period being allocated equally amongst characters
                 
+            }
+        }
+
+        private void CharacterEatDotCheck(BoardGameObject adjacentGameObject, Character character)
+        {
+            if (adjacentGameObject is DotGameObject && character is PacmanCharacter
+            ) // If pacman moves onto a dot, eat it
+            {
+                GameState.BoardState.GetBoardGameObjectReference(adjacentGameObject.Position) =
+                    new EmptySpaceGameObject((DotGameObject) adjacentGameObject);
+                GameState.Score++;
             }
         }
 
         public void RandomlyTurnGhosts()
         {
-            
+            // todo prevent ghost foolishly turning into wall
             var random = new Random();
             var ghosts = GameState.GameCharacterSet.Where(x => x is GhostCharacter);
             foreach (var ghost in ghosts)

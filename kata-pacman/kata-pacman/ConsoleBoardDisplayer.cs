@@ -8,6 +8,8 @@ namespace kata_pacman
 
         public void DisplayConsoleBoard(GameState gameState)
         {
+            Console.WriteLine("Score: " + gameState.Score);
+            
             var presentationBoard = ConstructPresentationBoard(gameState);
 
             ConsoleRenderPresentationBoard(presentationBoard);
