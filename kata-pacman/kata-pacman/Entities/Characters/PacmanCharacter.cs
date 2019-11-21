@@ -5,6 +5,8 @@ namespace kata_pacman.Characters
 {
     public class PacmanCharacter : Character
     {
+        
+        public bool TurnAvailable { get; set; }
 
         public PacmanCharacter(Coordinate spawnPosition, Direction spawnDirection, BoardState boardState) : base(spawnPosition, spawnDirection, boardState)
         {

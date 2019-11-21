@@ -14,7 +14,6 @@ namespace kata_pacman
         private GameInputThreadProcessor GameInputThreadProcessor;
 
         public int TickPeriod { get; set; }
-        
 
         public GameProcessor(ConsoleBoardDisplayer consoleBoardDisplayer, GameInputThreadProcessor gameInputThreadProcessor, int tickPeriod)
         {
@@ -36,34 +35,32 @@ namespace kata_pacman
 
             while (GameState.GameInProgress)
             {
-                var latestInputKey = GameInputThreadProcessor.LatestCharacterInput;
-                if (latestInputKey != null)
-                {
-                    GameState.PlayableCharacter.HandleInputTurn((CharacterInput) latestInputKey);
-
-                }
-
+                
                 RandomlyTurnGhosts();
                     
                 ProcessCharacterMovement();
                 
                 ConsoleBoardDisplayer.DisplayConsoleBoard(GameState);
-                Thread.Sleep(TickPeriod/GameState.GameCharacterSet.Count); // Wait for tick period, with tick waiting period being allocated equally amongst characters
+
+                Tick();
 
             }
-            
+
         }
 
-       
+        private void Tick()
+        {
+            Thread.Sleep(TickPeriod/GameState.GameCharacterSet.Count); // Wait for tick period, with tick waiting period being allocated equally amongst characters
+            GameState.TickNumber++;
+            GameState.PlayableCharacter.TurnAvailable = true;
+        }
         
         public void ProcessCharacterMovement()
         {
             foreach (var character in GameState.GameCharacterSet)
             {
-
-                var originalPosition = character.Position;
-
-                var adjacentGameObject = GameState.BoardState.GetAdjacentObjectFromDirection(originalPosition, character.Direction);
+                
+                var adjacentGameObject = GameState.BoardState.GetAdjacentObjectFromDirection(character.Position, character.Direction);
 
                 var adjacentCharacter = adjacentGameObject.CharacterOnGameObject;
 
@@ -82,39 +79,69 @@ namespace kata_pacman
                 {
                     if (adjacentGameObject.Passable) // If GameObject is passable, can move character onto it
                     {
-
-                        // Updating character position and board character reference whether object has WrapAround behaviour or not
-                        if (adjacentGameObject is WrapAroundGameObject)
-                        {
-                            character.Position = ((WrapAroundGameObject) adjacentGameObject).WrapPosition;
-
-                            var wrapGameObject = GameState.BoardState.GetBoardGameObjectReference(
-                                ((WrapAroundGameObject) adjacentGameObject)
-                                .WrapPosition);
-
-                            wrapGameObject.CharacterOnGameObject = character;
-
-                            // Updating adjacentGameObject immediately for DotGameObject check 
-                            adjacentGameObject = wrapGameObject;
-
-                        }
-                        else
-                        {
-                            character.Position = adjacentGameObject.Position;
-                            adjacentGameObject.CharacterOnGameObject = character;
-                        }
-
-                        // Removing the old board character reference
-                        GameState.BoardState.GetBoardGameObjectReference(originalPosition).CharacterOnGameObject = null;
-
-                        CharacterEatDotCheck(adjacentGameObject, character);
-
+                        MoveCharacter(adjacentGameObject, character);
                     }
                 }
 
                 
             }
         }
+
+        private void MoveCharacter(BoardGameObject adjacentGameObject, Character character)
+        {
+            
+            var originalPosition = character.Position;
+
+            // Updating character position and board character reference whether object has WrapAround behaviour or not
+            if (adjacentGameObject is WrapAroundGameObject)
+            {
+                character.Position = ((WrapAroundGameObject) adjacentGameObject).WrapPosition;
+
+                var wrapGameObject = GameState.BoardState.GetBoardGameObjectReference(
+                    ((WrapAroundGameObject) adjacentGameObject)
+                    .WrapPosition);
+
+                wrapGameObject.CharacterOnGameObject = character;
+
+                // Updating adjacentGameObject immediately for DotGameObject check 
+                adjacentGameObject = wrapGameObject;
+            }
+            else
+            {
+                character.Position = adjacentGameObject.Position;
+                adjacentGameObject.CharacterOnGameObject = character;
+            }
+
+            // Removing the old board character reference
+            GameState.BoardState.GetBoardGameObjectReference(originalPosition).CharacterOnGameObject = null;
+
+            CharacterEatDotCheck(adjacentGameObject, character);
+        }
+
+        public void ProcessCharacterTurnInput(ConsoleKeyInfo keyInfo)
+        {
+
+            CharacterInput input;
+
+            if (keyInfo.Key == ConsoleKey.LeftArrow)
+            {
+                input = CharacterInput.LeftInput;
+            }
+            else
+            {
+                input = CharacterInput.RightInput;
+            }
+
+            if (GameState.PlayableCharacter.TurnAvailable)
+            {
+
+                GameState.PlayableCharacter.HandleInputTurn(input);
+                GameState.PlayableCharacter.TurnAvailable = false;
+                ConsoleBoardDisplayer.DisplayConsoleBoard(GameState);
+            }
+            
+        }
+        
 
         private void CharacterEatDotCheck(BoardGameObject adjacentGameObject, Character character)
         {

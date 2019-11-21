@@ -5,6 +5,7 @@ namespace kata_pacman
 {
     public class GameInputThreadProcessor
     {
+        public GameProcessor Processor;
         
         public CharacterInput? LatestCharacterInput { get; private set; }
 
@@ -24,21 +25,14 @@ namespace kata_pacman
                 {
                     
                     var keyInfo = Console.ReadKey(true);
-                    switch (keyInfo.Key)
-                    {
-                        case ConsoleKey.LeftArrow:
-                            LatestCharacterInput = CharacterInput.LeftInput;
-                            break;
-                        case ConsoleKey.RightArrow:
-                            LatestCharacterInput = CharacterInput.RightInput;
-                            break;
-                    }
+
+                    Processor.ProcessCharacterTurnInput(keyInfo);
                 }
                 else
                 {
                     LatestCharacterInput = null;
                 }
-                Thread.Sleep(100);
+                //Thread.Sleep(100);
                 
             } 
         }

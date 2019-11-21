@@ -12,6 +12,8 @@ namespace kata_pacman
         public readonly HashSet<Character> GameCharacterSet = new HashSet<Character>(); // Set used to ensure no character is duplicated in the game state
 
         public bool GameInProgress = true;
+
+        public int TickNumber { get; set; }
         
         public int Score { get; set; }
 
@@ -19,6 +21,8 @@ namespace kata_pacman
         {
 
             Score = 0;
+
+            TickNumber = 0;
             
             InitializeDefaultGameState();
 
