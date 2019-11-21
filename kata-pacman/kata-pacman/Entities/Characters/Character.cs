@@ -6,7 +6,7 @@ namespace kata_pacman.Characters
     public abstract class Character : Entity
     {
 
-        public BoardState BoardState;
+        public readonly BoardState BoardState;
         
         public Character(Coordinate spawnPosition, Direction spawnDirection, BoardState boardState)
         {

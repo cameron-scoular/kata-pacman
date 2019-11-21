@@ -20,12 +20,12 @@ namespace kata_pacman
 
             for (var i = 0; i < 10; i++)
             {
-                
-                Board[i, 0] = new WallGameObject(new Coordinate(i, 0));
-                Board[i, 9] = new WallGameObject(new Coordinate(i, 9));
 
-                Board[0, i] = new WallGameObject(new Coordinate(0, i));
-                Board[9, i] = new WallGameObject(new Coordinate(9, i));
+                Board[i, 0] = new WrapAroundGameObject(new Coordinate(i, 0), new Coordinate(i, 8));
+                Board[i, 9] = new WrapAroundGameObject(new Coordinate(i, 9), new Coordinate(i, 1));
+
+                Board[0, i] = new WrapAroundGameObject(new Coordinate(0, i), new Coordinate(8, i));
+                Board[9, i] = new WrapAroundGameObject(new Coordinate(9, i), new Coordinate(1, i));
 
             }
 
@@ -36,6 +36,25 @@ namespace kata_pacman
                     Board[i, j] = new DotGameObject(new Coordinate(i, j));
                 }
             }
+            
+            for (var i = 1; i < 9; i++)
+            {
+                Board[i, 0] = new WallGameObject(new Coordinate(i, 0));
+                Board[i, 9] = new WallGameObject(new Coordinate(i, 9));
+            }
+
+            for (var i = 2; i < 8; i++)
+            {
+                Board[0, i] = new WallGameObject(new Coordinate(0, i));
+                Board[9, i] = new WallGameObject(new Coordinate(9, i));
+            }
+            
+            Board[0, 0] = new WallGameObject(new Coordinate(0, 0));
+            Board[0, 9] = new WallGameObject(new Coordinate(0, 9));
+            Board[9, 0] = new WallGameObject(new Coordinate(9, 0));
+            Board[9, 9] = new WallGameObject(new Coordinate(9, 9));
+
+            
             
             PlayerSpawnPosition = new Coordinate(5, 5);
 

@@ -52,7 +52,7 @@ namespace kata_pacman
                 
                 for (var j = 0; j < presentationBoard.GetLength(1); j++)
                 {
-                    stringBuilderRow.Append('\t');
+                    stringBuilderRow.Append(' ');
                     stringBuilderRow.Append(presentationBoard[i, j].RenderSymbol);
 
                 }

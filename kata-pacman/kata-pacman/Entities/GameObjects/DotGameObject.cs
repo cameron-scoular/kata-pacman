@@ -7,7 +7,6 @@ namespace kata_pacman
 
         public DotGameObject(Coordinate position) : base(position)
         {
-            Position = position;
             Passable = true;
             RenderSymbol = '.';
 

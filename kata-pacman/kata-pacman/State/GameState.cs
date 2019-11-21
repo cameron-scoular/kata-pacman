@@ -11,11 +11,20 @@ namespace kata_pacman
         
         public readonly HashSet<Character> GameCharacterSet = new HashSet<Character>(); // Set used to ensure no character is duplicated in the game state
 
+        public bool GameInProgress = true;
+        
+        public int Score { get; set; }
+
         public GameState()
         {
+
+            Score = 0;
+            
             InitializeDefaultGameState();
 
             InitializeDefaultPlayableCharacter();
+
+            InitializeDefaultGhostCharacter();
         }
 
         public void InitializeDefaultGameState()
@@ -29,6 +38,11 @@ namespace kata_pacman
             PlayableCharacter = new PacmanCharacter(BoardState.PlayerSpawnPosition, Direction.East, BoardState);
             GameCharacterSet.Add(PlayableCharacter);
             
+        }
+
+        public void InitializeDefaultGhostCharacter()
+        {
+            GameCharacterSet.Add(new GhostCharacter(new Coordinate(1, 1), Direction.East, BoardState));
         }
         
     }
