@@ -55,9 +55,9 @@ namespace kata_pacman
             foreach (var character in GameState.GameCharacterSet)
             {
 
-                var currentPos = character.Position;
+                var originalPosition = character.Position;
 
-                var adjacentGameObject = GameState.BoardState.GetAdjacentObjectFromDirection(currentPos, character.Direction);
+                var adjacentGameObject = GameState.BoardState.GetAdjacentObjectFromDirection(originalPosition, character.Direction);
                 
                 if (adjacentGameObject.Passable) // If GameObject is passable, can move character onto it
                 {
@@ -65,8 +65,16 @@ namespace kata_pacman
                     character.Position = adjacentGameObject.Position; // Changing the character's position
                     
                     // Updating board state references 
-                    GameState.BoardState.Board[adjacentGameObject.Position.XPos, adjacentGameObject.Position.YPos].CharacterOnGameObject = character; 
-                    GameState.BoardState.Board[currentPos.XPos, currentPos.YPos].CharacterOnGameObject = null; 
+                    adjacentGameObject.CharacterOnGameObject = character; 
+                    GameState.BoardState.GetBoardGameObjectReference(originalPosition).CharacterOnGameObject = null;
+
+                    if (adjacentGameObject is DotGameObject) // If pacman moves onto a dot, eat it
+                    {
+                        GameState.BoardState.GetBoardGameObjectReference(adjacentGameObject.Position) = new EmptySpaceGameObject((DotGameObject)adjacentGameObject);
+                        Score++;
+                    }
+                    
+                    // todo handle wrap around movement
 
                 }
 

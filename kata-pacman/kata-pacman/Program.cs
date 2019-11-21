@@ -11,7 +11,7 @@ namespace kata_pacman
             
             var displayer = new ConsoleBoardDisplayer();
 
-            var gameProcessor = new GameProcessor(displayer, gameInputMediator, 500);
+            var gameProcessor = new GameProcessor(displayer, gameInputMediator, 2000);
             
             gameProcessor.RunGame();
 

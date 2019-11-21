@@ -42,6 +42,11 @@ namespace kata_pacman
             
         }
 
+        public ref BoardGameObject GetBoardGameObjectReference(Coordinate position)
+        {
+            return ref Board[position.XPos, position.YPos];
+        }
+        
         public BoardGameObject GetAdjacentObjectFromDirection(Coordinate position, Direction direction)
         {
             switch (direction)
