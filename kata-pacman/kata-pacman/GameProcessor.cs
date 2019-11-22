@@ -36,9 +36,7 @@ namespace kata_pacman
             while (GameState.GameInProgress)
             {
                 
-                RandomlyTurnGhosts();
-                    
-                ProcessCharacterMovement();
+                ProcessAllCharacters();
                 
                 ConsoleBoardDisplayer.DisplayConsoleBoard(GameState);
 
@@ -50,138 +48,30 @@ namespace kata_pacman
 
         private void Tick()
         {
-            Thread.Sleep(TickPeriod/GameState.GameCharacterSet.Count); // Wait for tick period, with tick waiting period being allocated equally amongst characters
+            Thread.Sleep(TickPeriod);
             GameState.TickNumber++;
-            GameState.PlayableCharacter.TurnAvailable = true;
+            GameState.PacmanCharacter.TurnAvailable = true;
         }
         
-        public void ProcessCharacterMovement()
+        public void ProcessAllCharacters()
         {
             foreach (var character in GameState.GameCharacterSet)
             {
-                
-                var adjacentGameObject = GameState.BoardState.GetAdjacentObjectFromDirection(character.Position, character.Direction);
-
-                var adjacentCharacter = adjacentGameObject.CharacterOnGameObject;
-
-                // If there is a character on the adjacentGameObject handle it, otherwise can just check moving onto it
-                if (adjacentCharacter != null) 
-                {
-                    // Collision between pacman and ghost
-                    if ((character is GhostCharacter && adjacentCharacter is PacmanCharacter) ||
-                        (character is PacmanCharacter && adjacentCharacter is GhostCharacter))
-                    {
-                        LoseGame();
-                        break;
-                    }
-                }
-                else
-                {
-                    if (adjacentGameObject.Passable) // If GameObject is passable, can move character onto it
-                    {
-                        MoveCharacter(adjacentGameObject, character);
-                    }
-                }
-
-                
+                character.ProcessCharacter(GameState, this);
             }
+
         }
 
-        private void MoveCharacter(BoardGameObject adjacentGameObject, Character character)
-        {
-            
-            var originalPosition = character.Position;
-
-            // Updating character position and board character reference whether object has WrapAround behaviour or not
-            if (adjacentGameObject is WrapAroundGameObject)
-            {
-                character.Position = ((WrapAroundGameObject) adjacentGameObject).WrapPosition;
-
-                var wrapGameObject = GameState.BoardState.GetBoardGameObjectReference(
-                    ((WrapAroundGameObject) adjacentGameObject)
-                    .WrapPosition);
-
-                wrapGameObject.CharacterOnGameObject = character;
-
-                // Updating adjacentGameObject immediately for DotGameObject check 
-                adjacentGameObject = wrapGameObject;
-            }
-            else
-            {
-                character.Position = adjacentGameObject.Position;
-                adjacentGameObject.CharacterOnGameObject = character;
-            }
-
-            // Removing the old board character reference
-            GameState.BoardState.GetBoardGameObjectReference(originalPosition).CharacterOnGameObject = null;
-
-            CharacterEatDotCheck(adjacentGameObject, character);
-        }
+        
 
         public void ProcessCharacterTurnInput(ConsoleKeyInfo keyInfo)
         {
 
-            CharacterInput input;
-
-            if (keyInfo.Key == ConsoleKey.LeftArrow)
-            {
-                input = CharacterInput.LeftInput;
-            }
-            else
-            {
-                input = CharacterInput.RightInput;
-            }
-
-            if (GameState.PlayableCharacter.TurnAvailable)
-            {
-
-                GameState.PlayableCharacter.HandleInputTurn(input);
-                GameState.PlayableCharacter.TurnAvailable = false;
-                ConsoleBoardDisplayer.DisplayConsoleBoard(GameState);
-            }
+            GameState.PacmanCharacter.HandleInputTurn(keyInfo, ConsoleBoardDisplayer, GameState);
+                
             
         }
         
-
-        private void CharacterEatDotCheck(BoardGameObject adjacentGameObject, Character character)
-        {
-            if (adjacentGameObject is DotGameObject && character is PacmanCharacter
-            ) // If pacman moves onto a dot, eat it
-            {
-                GameState.BoardState.GetBoardGameObjectReference(adjacentGameObject.Position) =
-                    new EmptySpaceGameObject((DotGameObject) adjacentGameObject);
-                GameState.Score++;
-            }
-        }
-
-        public void RandomlyTurnGhosts()
-        {
-            // todo prevent ghost foolishly turning into wall
-            var random = new Random();
-            var ghosts = GameState.GameCharacterSet.Where(x => x is GhostCharacter);
-            foreach (var ghost in ghosts)
-            {
-                if (random.NextDouble() < 0.3)
-                {
-                    if (random.NextDouble() < 0.25)
-                    {
-                        ghost.Direction = Direction.North;
-                    }else if (random.NextDouble() < 0.5)
-                    {
-                        ghost.Direction = Direction.East;
-                    }else if (random.NextDouble() < 0.75)
-                    {
-                        ghost.Direction = Direction.South;
-                    }
-                    else
-                    {
-                        ghost.Direction = Direction.West;
-                    }
-                    
-                }
-                
-            }
-        }
 
         public void LoseGame()
         {

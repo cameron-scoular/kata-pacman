@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace kata_pacman
 {
-    public class WallGameObject : BoardGameObject
+    public class WallGameTile : GameTile
     {
 
-        public WallGameObject(Coordinate position) : base(position)
+        public WallGameTile(Coordinate position) : base(position)
         {
             Position = position;
             Passable = false;

@@ -3,10 +3,17 @@ using System.Drawing;
 
 namespace kata_pacman.Characters
 {
-    public abstract class Character : Entity
+    public abstract class Character : IEntity
     {
-
+        
+        public Coordinate Position { get; set; }
+        public char RenderSymbol { get; set; }
+        
         public readonly BoardState BoardState;
+
+        public abstract void ProcessCharacter(GameState gameState, GameProcessor processor);
+        public abstract void InteractWithAdjacentCharacter(Character character, GameProcessor processor);
+        public abstract void InteractWithGameTile(GameTile gameTile, GameState gameState);
         
         public Character(Coordinate spawnPosition, Direction spawnDirection, BoardState boardState)
         {
@@ -14,12 +21,66 @@ namespace kata_pacman.Characters
             Position = spawnPosition;
             Direction = spawnDirection;
             BoardState = boardState;
-            BoardState.Board[spawnPosition.XPos, spawnPosition.YPos].CharacterOnGameObject = this;
+            BoardState.Board[spawnPosition.XPos, spawnPosition.YPos].CharacterOnGameTile = this;
         }
         
         public bool Alive { get; set; }
         
         public Direction Direction { get; set; }
+
+        public void ProcessCharacterMovement(GameState gameState, GameProcessor gameProcessor)
+        {
+            var adjacentGameObject =
+                gameState.BoardState.GetAdjacentGameTile(Position, Direction);
+
+            var adjacentCharacter = adjacentGameObject.CharacterOnGameTile;
+
+            // If there is a character on the adjacentGameObject handle it, otherwise can just check moving onto it
+            if (adjacentCharacter != null)
+            {
+                InteractWithAdjacentCharacter(adjacentCharacter, gameProcessor);
+            }
+            else
+            {
+                if (adjacentGameObject.Passable) // If GameObject is passable, can move character onto it
+                {
+                    adjacentGameObject = MoveCharacter(adjacentGameObject, gameState.BoardState);
+                    InteractWithGameTile(adjacentGameObject, gameState);
+
+                }
+            }
+        }
+        
+        public GameTile MoveCharacter(GameTile adjacentGameTile, BoardState boardState)
+        {
+            
+            var originalPosition = Position;
+
+            // Updating character position and board character reference whether object has WrapAround behaviour or not
+            if (adjacentGameTile is WrapAroundGameTile)
+            {
+                Position = ((WrapAroundGameTile) adjacentGameTile).WrapPosition;
+
+                var wrapGameObject = boardState.GetGameTile(
+                    ((WrapAroundGameTile) adjacentGameTile)
+                    .WrapPosition);
+
+                wrapGameObject.CharacterOnGameTile = this;
+
+                // Updating adjacentGameObject immediately for DotGameObject check 
+                adjacentGameTile = wrapGameObject;
+            }
+            else
+            {
+                Position = adjacentGameTile.Position;
+                adjacentGameTile.CharacterOnGameTile = this;
+            }
+
+            // Removing the old board character reference
+            boardState.GetGameTile(originalPosition).CharacterOnGameTile = null;
+            return adjacentGameTile;
+        }
+
         
         public Direction GetNewDirection(CharacterInput characterInput)
         {
@@ -54,6 +115,5 @@ namespace kata_pacman.Characters
             
             throw new Exception();
         }
-
     }
 }

@@ -2,10 +2,10 @@ using System.ComponentModel.Design;
 
 namespace kata_pacman
 {
-    public class WrapAroundGameObject : BoardGameObject
+    public class WrapAroundGameTile : GameTile
     {
 
-        public WrapAroundGameObject(Coordinate position, Coordinate wrapPosition) : base(position)
+        public WrapAroundGameTile(Coordinate position, Coordinate wrapPosition) : base(position)
         {
             WrapPosition = wrapPosition;
             Passable = true;

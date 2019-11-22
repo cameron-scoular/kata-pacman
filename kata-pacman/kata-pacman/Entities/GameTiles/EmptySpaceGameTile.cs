@@ -2,17 +2,17 @@ using System.Collections.Generic;
 
 namespace kata_pacman
 {
-    public class EmptySpaceGameObject : BoardGameObject
+    public class EmptySpaceGameTile : GameTile
     {
-        public EmptySpaceGameObject(Coordinate position) : base(position)
+        public EmptySpaceGameTile(Coordinate position) : base(position)
         {
             SetupEmptySpaceFields();
         }
 
-        public EmptySpaceGameObject(DotGameObject dotGameObject) : base(dotGameObject.Position)
+        public EmptySpaceGameTile(DotGameTile dotGameTile) : base(dotGameTile.Position)
         {
             SetupEmptySpaceFields();
-            CharacterOnGameObject = dotGameObject.CharacterOnGameObject;
+            CharacterOnGameTile = dotGameTile.CharacterOnGameTile;
         }
 
         public void SetupEmptySpaceFields()

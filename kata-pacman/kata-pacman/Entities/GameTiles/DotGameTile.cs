@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace kata_pacman
 {
-    public class DotGameObject : BoardGameObject
+    public class DotGameTile : GameTile
     {
 
-        public DotGameObject(Coordinate position) : base(position)
+        public DotGameTile(Coordinate position) : base(position)
         {
             Passable = true;
             RenderSymbol = '.';

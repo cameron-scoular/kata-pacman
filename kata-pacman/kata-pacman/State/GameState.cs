@@ -7,7 +7,7 @@ namespace kata_pacman
     {
         public BoardState BoardState { get; private set; }
         
-        public PacmanCharacter PlayableCharacter;
+        public PacmanCharacter PacmanCharacter;
         
         public readonly HashSet<Character> GameCharacterSet = new HashSet<Character>(); // Set used to ensure no character is duplicated in the game state
 
@@ -39,15 +39,15 @@ namespace kata_pacman
         public void InitializeDefaultPlayableCharacter()
         {
             
-            PlayableCharacter = new PacmanCharacter(BoardState.PlayerSpawnPosition, Direction.East, BoardState);
-            GameCharacterSet.Add(PlayableCharacter);
+            PacmanCharacter = new PacmanCharacter(BoardState.PlayerSpawnPosition, Direction.East, BoardState);
+            GameCharacterSet.Add(PacmanCharacter);
             
         }
 
         public void InitializeDefaultGhostCharacter()
         {
-            GameCharacterSet.Add(new GhostCharacter(new Coordinate(1, 1), Direction.East, BoardState));
-            GameCharacterSet.Add(new GhostCharacter(new Coordinate(2, 2), Direction.West, BoardState));
+            GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 1), Direction.East, BoardState));
+            GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(2, 2), Direction.West, BoardState));
         }
         
     }

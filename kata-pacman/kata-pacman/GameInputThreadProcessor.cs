@@ -8,17 +8,15 @@ namespace kata_pacman
         public GameProcessor Processor;
         public bool GameActive = true;
         
-        public CharacterInput? LatestCharacterInput { get; private set; }
-
-        private Thread ListeningThread;
+        private Thread KeyPressHandlerThread;
 
         public GameInputThreadProcessor()
         {
-            ListeningThread = new Thread(ListenAndUpdateLatestKeyPress);
-            ListeningThread.Start();
+            KeyPressHandlerThread = new Thread(DetectAndHandleKeyPress);
+            KeyPressHandlerThread.Start();
         }
 
-        private void ListenAndUpdateLatestKeyPress()
+        private void DetectAndHandleKeyPress()
         {
             while (GameActive)
             {
@@ -29,11 +27,7 @@ namespace kata_pacman
 
                     Processor.ProcessCharacterTurnInput(keyInfo);
                 }
-                else
-                {
-                    LatestCharacterInput = null;
-                }
-                
+
             } 
         }
         

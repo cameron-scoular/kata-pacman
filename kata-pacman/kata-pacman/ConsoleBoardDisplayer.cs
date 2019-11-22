@@ -17,9 +17,9 @@ namespace kata_pacman
 
         
         // This method constructs an array of entities from the game state for rendering (Needed since not all game entities are displayed)
-        private Entity[,] ConstructPresentationBoard(GameState gameState)
+        private IEntity[,] ConstructPresentationBoard(GameState gameState)
         {
-            var presentationBoard = new Entity[gameState.BoardState.Board.GetLength(0), gameState.BoardState.Board.GetLength(1)];
+            var presentationBoard = new IEntity[gameState.BoardState.Board.GetLength(0), gameState.BoardState.Board.GetLength(1)];
             
             for(var i = 0; i < gameState.BoardState.Board.GetLength(0); i++)
             {
@@ -28,9 +28,9 @@ namespace kata_pacman
 
                     var boardGameObject = gameState.BoardState.Board[i, j];
 
-                    if (boardGameObject.CharacterOnGameObject != null) // If there is a character on this coordinate, place the character in the presentation board for rendering
+                    if (boardGameObject.CharacterOnGameTile != null) // If there is a character on this coordinate, place the character in the presentation board for rendering
                     {
-                        presentationBoard[i, j] = boardGameObject.CharacterOnGameObject;
+                        presentationBoard[i, j] = boardGameObject.CharacterOnGameTile;
                     }
                     else // Otherwise only need to render the BoardGameObject underneath
                     {
@@ -45,7 +45,7 @@ namespace kata_pacman
         }
 
         //  Displays the presentation board in the console
-        private void ConsoleDisplayPresentationBoard(Entity[,] presentationBoard)
+        private void ConsoleDisplayPresentationBoard(IEntity[,] presentationBoard)
         {
 
             for (var i = 0; i < presentationBoard.GetLength(0); i++)
