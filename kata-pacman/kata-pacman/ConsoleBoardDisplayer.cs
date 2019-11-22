@@ -12,11 +12,11 @@ namespace kata_pacman
             
             var presentationBoard = ConstructPresentationBoard(gameState);
 
-            ConsoleRenderPresentationBoard(presentationBoard);
+            ConsoleDisplayPresentationBoard(presentationBoard);
         }
 
         
-        // This method constructs an array of entities from the game state for rendering
+        // This method constructs an array of entities from the game state for rendering (Needed since not all game entities are displayed)
         private Entity[,] ConstructPresentationBoard(GameState gameState)
         {
             var presentationBoard = new Entity[gameState.BoardState.Board.GetLength(0), gameState.BoardState.Board.GetLength(1)];
@@ -44,7 +44,8 @@ namespace kata_pacman
 
         }
 
-        private void ConsoleRenderPresentationBoard(Entity[,] presentationBoard)
+        //  Displays the presentation board in the console
+        private void ConsoleDisplayPresentationBoard(Entity[,] presentationBoard)
         {
 
             for (var i = 0; i < presentationBoard.GetLength(0); i++)

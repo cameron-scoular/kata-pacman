@@ -6,6 +6,7 @@ namespace kata_pacman
     public class GameInputThreadProcessor
     {
         public GameProcessor Processor;
+        public bool GameActive = true;
         
         public CharacterInput? LatestCharacterInput { get; private set; }
 
@@ -19,7 +20,7 @@ namespace kata_pacman
 
         private void ListenAndUpdateLatestKeyPress()
         {
-            while (true)
+            while (GameActive)
             {
                 if (Console.KeyAvailable)
                 {
@@ -32,7 +33,6 @@ namespace kata_pacman
                 {
                     LatestCharacterInput = null;
                 }
-                //Thread.Sleep(100);
                 
             } 
         }

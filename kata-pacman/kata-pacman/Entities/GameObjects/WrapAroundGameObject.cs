@@ -12,6 +12,7 @@ namespace kata_pacman
             RenderSymbol = '~';
         }
 
+        // Position where character is 'teleported' to for movement wrapping across the game board
         public Coordinate WrapPosition { get; }
         
     }

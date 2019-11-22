@@ -9,7 +9,7 @@ namespace kata_pacman
     public class GameProcessor
     {
 
-        private GameState GameState;
+        public GameState GameState;
         private ConsoleBoardDisplayer ConsoleBoardDisplayer;
         private GameInputThreadProcessor GameInputThreadProcessor;
 
@@ -187,6 +187,7 @@ namespace kata_pacman
         {
             Console.WriteLine("Game Over!");
             GameState.GameInProgress = false;
+            GameInputThreadProcessor.GameActive = false;
         }
 
     }

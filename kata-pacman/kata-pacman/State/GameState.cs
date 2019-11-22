@@ -47,6 +47,7 @@ namespace kata_pacman
         public void InitializeDefaultGhostCharacter()
         {
             GameCharacterSet.Add(new GhostCharacter(new Coordinate(1, 1), Direction.East, BoardState));
+            GameCharacterSet.Add(new GhostCharacter(new Coordinate(2, 2), Direction.West, BoardState));
         }
         
     }
