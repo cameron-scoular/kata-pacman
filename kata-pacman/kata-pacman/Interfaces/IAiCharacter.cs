@@ -1,6 +1,6 @@
 namespace kata_pacman.Characters
 {
-    public interface IAiCharacter
+    public interface IAiCharacter : ICharacter
     {
         void ExecuteAiBehaviour();
     }

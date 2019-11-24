@@ -8,7 +8,7 @@ namespace kata_pacman
         public Coordinate Position { get; set; }
         public char RenderSymbol { get; set; }
         public bool Passable;
-        public Character CharacterOnGameTile { get; set; }
+        public ICharacter CharacterOnGameTile { get; set; }
         
         public GameTile(Coordinate position)
         {

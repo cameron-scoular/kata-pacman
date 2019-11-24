@@ -28,7 +28,16 @@ namespace kata_pacman
         {
             GameState = new GameState();
             TickPeriod = tickPeriod;
-        }
+            
+            var pacmanCharacterProcessor = new CharacterProcessor(new PacmanCharacterInteractionProcessor(), new PacmanGameTileInteractionProcessor(), this);   
+            var pacmanCharacter = new PacmanCharacter(GameState.BoardState.PlayerSpawnPosition, Direction.East, pacmanCharacterProcessor);
+            GameState.PacmanCharacter = pacmanCharacter;
+            GameState.GameCharacterSet.Add(pacmanCharacter);
+            
+            var ghostCharacterProcessor = new CharacterProcessor(new GhostCharacterInteractionProcessor(), new GhostGameTileInteractionProcessor(), this);
+            GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 1), Direction.East, ghostCharacterProcessor));
+            GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(2, 2), Direction.West, ghostCharacterProcessor));
+        } 
 
         public void RunGame()
         {
@@ -57,7 +66,7 @@ namespace kata_pacman
         {
             foreach (var character in GameState.GameCharacterSet)
             {
-                character.ProcessCharacter(GameState, this);
+                character.ProcessCharacter();
             }
 
         }

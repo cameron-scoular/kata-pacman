@@ -3,17 +3,29 @@ using System.Collections.Generic;
 
 namespace kata_pacman.Characters
 {
-    public class PacmanCharacter : Character
+    public class PacmanCharacter : ICharacter
     {
         
         public bool TurnAvailable { get; set; }
+        
+        public ICharacterProcessor CharacterProcessor { get; set; }
 
-        public PacmanCharacter(Coordinate spawnPosition, Direction spawnDirection, BoardState boardState) : base(spawnPosition, spawnDirection, boardState)
+        public Coordinate Position { get; set; }
+        public Direction Direction { get; set; }
+        public char RenderSymbol { get; set; }
+
+
+        public PacmanCharacter(Coordinate spawnPosition, Direction spawnDirection, ICharacterProcessor characterProcessor)
         {
             Position = spawnPosition;
-            Direction = Direction;
+            Direction = spawnDirection;
             RenderSymbol = GetRenderSymbolFromDirection(spawnDirection);
-            
+            CharacterProcessor = characterProcessor;
+        }
+
+        public void ProcessCharacter()
+        {
+            CharacterProcessor.ProcessCharacter(this); // todo better reveal intent here
         }
 
         public void HandleInputTurn(ConsoleKeyInfo keyInfo, ConsoleBoardDisplayer displayer, GameState gameState)
@@ -33,7 +45,7 @@ namespace kata_pacman.Characters
             
                 var newDirection = GetNewDirection(input);
 
-                var adjacentGameObject = BoardState.GetAdjacentGameTile(Position, newDirection);
+                var adjacentGameObject = gameState.BoardState.GetAdjacentGameTile(Position, newDirection);
 
                 if (adjacentGameObject.Passable) // If the adjacent space is passable, then the new direction is valid
                 {
@@ -45,28 +57,6 @@ namespace kata_pacman.Characters
             }
         }
 
-        public override void ProcessCharacter(GameState gameState, GameProcessor processor)
-        {
-            ProcessCharacterMovement(gameState, processor);
-        }
-
-        public override void InteractWithAdjacentCharacter(Character adjacentCharacter, GameProcessor gameProcessor)
-        {
-            if (adjacentCharacter is DumbGhostCharacter)
-            {
-                gameProcessor.LoseGame();
-            }        
-        }
-
-        public override void InteractWithGameTile(GameTile gameTile, GameState gameState)
-        {
-            if (gameTile is DotGameTile) 
-            {
-                gameState.BoardState.GetGameTile(gameTile.Position) = new EmptySpaceGameTile((DotGameTile) gameTile);
-                gameState.Score++;
-            }
-        }
-        
         private char GetRenderSymbolFromDirection(Direction direction)
         {
             switch (direction) 
@@ -84,7 +74,39 @@ namespace kata_pacman.Characters
             throw new Exception();
         }
 
-        
-        
+        public Direction GetNewDirection(CharacterInput characterInput)
+        {
+            if (characterInput == CharacterInput.LeftInput)
+            {
+                switch (Direction)
+                {
+                    case Direction.North:
+                        return Direction.West;
+                    case Direction.East:
+                        return Direction.North;
+                    case Direction.South:
+                        return Direction.East;
+                    case Direction.West:
+                        return Direction.South;
+                }
+            }
+            else if (characterInput == CharacterInput.RightInput)
+            {
+                switch (Direction)
+                {
+                    case Direction.North:
+                        return Direction.East;
+                    case Direction.East:
+                        return Direction.South;
+                    case Direction.South:
+                        return Direction.West;
+                    case Direction.West:
+                        return Direction.North;
+                }
+            }
+            
+            throw new Exception();
+        }
+
     }
 }

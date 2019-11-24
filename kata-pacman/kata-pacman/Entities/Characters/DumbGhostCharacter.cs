@@ -4,26 +4,28 @@ using System.Linq;
 
 namespace kata_pacman.Characters
 {
-    public class DumbGhostCharacter : Character, IAiCharacter
+    public class DumbGhostCharacter : IAiCharacter
     {
 
-        public DumbGhostCharacter(Coordinate spawnPosition, Direction spawnDirection, BoardState boardState) : base(spawnPosition, spawnDirection, boardState)
+        public ICharacterProcessor CharacterProcessor { get; set; }
+        public Coordinate Position { get; set; }
+        public Direction Direction { get; set; }
+        public char RenderSymbol { get; set; }
+        
+        public DumbGhostCharacter(Coordinate spawnPosition, Direction spawnDirection, ICharacterProcessor characterProcessor)
         {
             Position = spawnPosition;
             Direction = spawnDirection;
             RenderSymbol = 'G';
+            CharacterProcessor = characterProcessor;
         }
 
-      
-        public override void ProcessCharacter(GameState gameState, GameProcessor gameProcessor)
+        public void ProcessCharacter()
         {
-
             ExecuteAiBehaviour();
-
-            ProcessCharacterMovement(gameState, gameProcessor);
-            
+            CharacterProcessor.ProcessCharacter(this);
         }
-        
+
         public void ExecuteAiBehaviour()
         {
             var random = new Random();
@@ -50,20 +52,6 @@ namespace kata_pacman.Characters
             }
 
         }
-
-
         
-        public override void InteractWithAdjacentCharacter(Character adjacentCharacter, GameProcessor gameProcessor)
-        {
-            if (adjacentCharacter is PacmanCharacter)
-            {
-                gameProcessor.LoseGame();
-            }        
-        }
-
-        public override void InteractWithGameTile(GameTile gameTile, GameState gameState)
-        {
-            // Currently ghost does not interact with their game tile
-        }
     }
 }
