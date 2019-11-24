@@ -1,25 +1,35 @@
 using System.Collections.Generic;
+using kata_pacman.Characters;
 
 namespace kata_pacman
 {
-    public class EmptySpaceGameTile : GameTile
+    public class EmptySpaceGameTile : IGameTile
     {
-        public EmptySpaceGameTile(Coordinate position) : base(position)
+        
+        public Coordinate Position { get; set; }
+        public char RenderSymbol { get; set; }
+        public bool Passable { get; set; }
+        public ICharacter CharacterOnGameTile { get; set; }
+        
+        public EmptySpaceGameTile(Coordinate position) 
         {
-            SetupEmptySpaceFields();
+            SetupEmptySpaceFields(position);
         }
 
-        public EmptySpaceGameTile(DotGameTile dotGameTile) : base(dotGameTile.Position)
+        public EmptySpaceGameTile(DotGameTile dotGameTile) 
         {
-            SetupEmptySpaceFields();
+            SetupEmptySpaceFields(dotGameTile.Position);
             CharacterOnGameTile = dotGameTile.CharacterOnGameTile;
         }
 
-        public void SetupEmptySpaceFields()
+        public void SetupEmptySpaceFields(Coordinate position)
         {
             Passable = true;
             RenderSymbol = ' ';
+            Position = position;
+            Passable = true;
         }
+
         
     }
 }

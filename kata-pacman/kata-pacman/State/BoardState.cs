@@ -5,7 +5,7 @@ namespace kata_pacman
     public class BoardState
     {
         
-        public GameTile[,] Board { get; private set; }
+        public IGameTile[,] Board { get; private set; }
         
         public Coordinate PlayerSpawnPosition { get; private set; }
 
@@ -16,7 +16,7 @@ namespace kata_pacman
 
         public void InitializeDefaultBoard()
         {
-            Board = new GameTile[10, 10];
+            Board = new IGameTile[10, 10];
 
             for (var i = 0; i < 10; i++)
             {
@@ -61,12 +61,12 @@ namespace kata_pacman
             
         }
 
-        public ref GameTile GetGameTile(Coordinate position)
+        public ref IGameTile GetGameTile(Coordinate position)
         {
             return ref Board[position.XPos, position.YPos];
         }
         
-        public GameTile GetAdjacentGameTile(Coordinate position, Direction direction)
+        public IGameTile GetAdjacentGameTile(Coordinate position, Direction direction)
         {
             switch (direction)
             {

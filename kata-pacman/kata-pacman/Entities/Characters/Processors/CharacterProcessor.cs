@@ -41,7 +41,7 @@ namespace kata_pacman.Characters
 
         }
         
-        public void ProcessCharacterMovement(ICharacter character, GameTile adjacentGameTile){
+        public void ProcessCharacterMovement(ICharacter character, IGameTile adjacentGameTile){
             
  
             if (adjacentGameTile.Passable) // If GameObject is passable, can move character onto it
