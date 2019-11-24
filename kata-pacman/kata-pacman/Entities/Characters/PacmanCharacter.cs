@@ -25,7 +25,7 @@ namespace kata_pacman.Characters
 
         public void ProcessCharacter()
         {
-            CharacterProcessor.ProcessCharacter(this); // todo better reveal intent here
+            CharacterProcessor.ProcessCharacter(this); 
         }
 
         public void HandleInputTurn(ConsoleKeyInfo keyInfo, ConsoleBoardDisplayer displayer, GameState gameState)

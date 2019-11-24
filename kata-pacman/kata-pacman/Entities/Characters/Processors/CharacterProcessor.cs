@@ -27,7 +27,6 @@ namespace kata_pacman.Characters
 
             var adjacentCharacter = adjacentGameTile.CharacterOnGameTile;
 
-            // If there is a character on the adjacentGameObject handle it, otherwise can just check moving onto it
             if (adjacentCharacter != null)
             {
                 CharacterInteractionProcessor.InteractWithAdjacentCharacter(adjacentCharacter, GameProcessor);
@@ -36,31 +35,28 @@ namespace kata_pacman.Characters
             {
                 ProcessCharacterMovement(character, adjacentGameTile);
             }
-            
-            GameTileInteractionProcessor.InteractWithGameTile(ref GameState.BoardState.GetGameTile(character.Position), GameState);
+
+            GameTileInteractionProcessor.InteractGameTile(ref GameState.BoardState.GetGameTile(character.Position), GameState);
 
         }
         
         public void ProcessCharacterMovement(ICharacter character, IGameTile adjacentGameTile){
             
  
-            if (adjacentGameTile.Passable) // If GameObject is passable, can move character onto it
+            if (adjacentGameTile.Passable)
             {
                 var originalPosition = character.Position;
 
-                // Updating character position and board character reference whether object has WrapAround behaviour or not
-                if (adjacentGameTile is WrapAroundGameTile)
+                if (adjacentGameTile is WrapAroundGameTile wrapAroundGameTile)
                 {
-                    character.Position = ((WrapAroundGameTile) adjacentGameTile).WrapPosition;
+                    character.Position = wrapAroundGameTile.WrapPosition;
 
                     var wrapGameObject = GameState.BoardState.GetGameTile(
-                        ((WrapAroundGameTile) adjacentGameTile)
+                        wrapAroundGameTile
                         .WrapPosition);
 
                     wrapGameObject.CharacterOnGameTile = character;
-
-                    // Updating adjacentGameObject immediately for DotGameObject check 
-                    adjacentGameTile = wrapGameObject;
+                    
                 }
                 else
                 {

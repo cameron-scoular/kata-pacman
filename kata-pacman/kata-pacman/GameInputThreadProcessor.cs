@@ -25,7 +25,7 @@ namespace kata_pacman
                     
                     var keyInfo = Console.ReadKey(true);
 
-                    Processor.ProcessCharacterTurnInput(keyInfo);
+                    Processor.ProcessTurnInput(keyInfo);
                 }
 
             } 

@@ -5,7 +5,6 @@ namespace kata_pacman.Characters
         ICharacterProcessor CharacterProcessor
         {
             get;
-            set;
         }
 
         void ProcessCharacter();

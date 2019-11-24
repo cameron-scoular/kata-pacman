@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+
 
 namespace kata_pacman.Characters
 {
@@ -8,6 +7,7 @@ namespace kata_pacman.Characters
     {
 
         public ICharacterProcessor CharacterProcessor { get; set; }
+
         public Coordinate Position { get; set; }
         public Direction Direction { get; set; }
         public char RenderSymbol { get; set; }

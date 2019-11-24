@@ -37,6 +37,8 @@ namespace kata_pacman
             var ghostCharacterProcessor = new CharacterProcessor(new GhostCharacterInteractionProcessor(), new GhostGameTileInteractionProcessor(), this);
             GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 1), Direction.East, ghostCharacterProcessor));
             GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(2, 2), Direction.West, ghostCharacterProcessor));
+            
+            GameState.GameCharacterSet.Add(new SmartGhostCharacter(new Coordinate(3, 4), Direction.East, ghostCharacterProcessor, GameState));
         } 
 
         public void RunGame()
@@ -45,14 +47,15 @@ namespace kata_pacman
             while (GameState.GameInProgress)
             {
                 
-                ProcessAllCharacters();
-                
+                foreach (var character in GameState.GameCharacterSet)
+                {
+                    character.ProcessCharacter();
+                }                
                 ConsoleBoardDisplayer.DisplayConsoleBoard(GameState);
 
                 Tick();
 
             }
-
         }
 
         private void Tick()
@@ -62,23 +65,9 @@ namespace kata_pacman
             GameState.PacmanCharacter.TurnAvailable = true;
         }
         
-        public void ProcessAllCharacters()
+        public void ProcessTurnInput(ConsoleKeyInfo keyInfo)
         {
-            foreach (var character in GameState.GameCharacterSet)
-            {
-                character.ProcessCharacter();
-            }
-
-        }
-
-        
-
-        public void ProcessCharacterTurnInput(ConsoleKeyInfo keyInfo)
-        {
-
             GameState.PacmanCharacter.HandleInputTurn(keyInfo, ConsoleBoardDisplayer, GameState);
-                
-            
         }
         
 
