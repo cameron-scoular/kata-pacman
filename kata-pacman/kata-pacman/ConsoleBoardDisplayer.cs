@@ -28,11 +28,11 @@ namespace kata_pacman
 
                     var boardGameObject = gameState.BoardState.Board[i, j];
 
-                    if (boardGameObject.CharacterOnGameTile != null) // If there is a character on this coordinate, place the character in the presentation board for rendering
+                    if (boardGameObject.CharacterOnGameTile != null) 
                     {
                         presentationBoard[i, j] = boardGameObject.CharacterOnGameTile;
                     }
-                    else // Otherwise only need to render the BoardGameObject underneath
+                    else 
                     {
                         presentationBoard[i, j] = boardGameObject;
                     }
@@ -44,7 +44,6 @@ namespace kata_pacman
 
         }
 
-        //  Displays the presentation board in the console
         private void ConsoleDisplayPresentationBoard(IEntity[,] presentationBoard)
         {
 

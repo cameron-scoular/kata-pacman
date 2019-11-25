@@ -9,7 +9,7 @@ namespace kata_pacman
         
         public PacmanCharacter PacmanCharacter;
         
-        public readonly HashSet<ICharacter> GameCharacterSet = new HashSet<ICharacter>(); // Set used to ensure no character is duplicated in the game state
+        public readonly HashSet<ICharacter> GameCharacterSet = new HashSet<ICharacter>(); 
 
         public bool GameInProgress = true;
 
@@ -17,14 +17,14 @@ namespace kata_pacman
         
         public int Score { get; set; }
 
-        public GameState()
+        public GameState(IGameTile[,] board, Coordinate spawnPosition)
         {
 
             Score = 0;
 
             TickNumber = 0;
             
-            BoardState = new BoardState();
+            BoardState = new BoardState(board, spawnPosition);
         }
 
         

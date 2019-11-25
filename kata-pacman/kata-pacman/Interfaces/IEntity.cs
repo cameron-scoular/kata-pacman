@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace kata_pacman
 {
     public interface IEntity

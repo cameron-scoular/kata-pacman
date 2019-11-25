@@ -36,7 +36,7 @@ namespace kata_pacman.Characters
                 ProcessCharacterMovement(character, adjacentGameTile);
             }
 
-            GameTileInteractionProcessor.InteractGameTile(ref GameState.BoardState.GetGameTile(character.Position), GameState);
+            GameTileInteractionProcessor.InteractWithGameTile(ref GameState.BoardState.GetGameTile(character.Position), GameState);
 
         }
         

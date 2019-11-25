@@ -7,12 +7,14 @@ namespace kata_pacman
     {
         static void Main(string[] args)
         {
-            var gameInputMediator = new GameInputThreadProcessor();
+            var gameInputThreadProcessor = new GameInputThreadProcessor();
             
             var displayer = new ConsoleBoardDisplayer();
 
-            var gameProcessor = new GameProcessor(displayer, gameInputMediator, 500);
-            gameInputMediator.Processor = gameProcessor;
+            var parser = new BoardFileParser();
+
+            var gameProcessor = new GameProcessor(displayer, gameInputThreadProcessor, parser,500);
+            gameInputThreadProcessor.Processor = gameProcessor;
             
             gameProcessor.RunGame();
 

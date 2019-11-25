@@ -47,7 +47,7 @@ namespace kata_pacman.Characters
 
                 var adjacentGameObject = gameState.BoardState.GetAdjacentGameTile(Position, newDirection);
 
-                if (adjacentGameObject.Passable) // If the adjacent space is passable, then the new direction is valid
+                if (adjacentGameObject.Passable) 
                 {
                     Direction = newDirection;
                     RenderSymbol = GetRenderSymbolFromDirection(Direction);

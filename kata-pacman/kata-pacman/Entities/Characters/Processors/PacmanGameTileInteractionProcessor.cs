@@ -2,10 +2,10 @@ namespace kata_pacman.Characters
 {
     public class PacmanGameTileInteractionProcessor : IGameTileInteractionProcessor
     {
-        public void InteractGameTile(ref IGameTile gameTile, GameState gameState)
+        public void InteractWithGameTile(ref IGameTile gameTile, GameState gameState)
         {
             
-            if (gameTile is DotGameTile) // If pacman moves onto a dot, eat it
+            if (gameTile is DotGameTile)
             {
                 gameTile = new EmptySpaceGameTile((DotGameTile)gameTile);
                 gameState.Score++;

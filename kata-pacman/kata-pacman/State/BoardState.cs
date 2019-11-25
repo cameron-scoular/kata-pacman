@@ -9,9 +9,11 @@ namespace kata_pacman
         
         public Coordinate PlayerSpawnPosition { get; private set; }
 
-        public BoardState()
+        public BoardState(IGameTile[,] board, Coordinate playerSpawnPosition)
         {
-            InitializeDefaultBoard();
+            //InitializeDefaultBoard();
+            Board = board;
+            PlayerSpawnPosition = playerSpawnPosition;
         }
 
         public void InitializeDefaultBoard()
@@ -79,8 +81,7 @@ namespace kata_pacman
                 case Direction.West:
                     return Board[position.XPos, position.YPos - 1];
             }
-
-            return null;
+            throw new Exception();
         }
         
     }

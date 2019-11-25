@@ -1,6 +1,4 @@
 using System;
-using System.ComponentModel.Design;
-using System.Linq;
 using System.Threading;
 using kata_pacman.Characters;
 
@@ -10,15 +8,17 @@ namespace kata_pacman
     {
 
         public GameState GameState;
-        private ConsoleBoardDisplayer ConsoleBoardDisplayer;
-        private GameInputThreadProcessor GameInputThreadProcessor;
+        private readonly ConsoleBoardDisplayer ConsoleBoardDisplayer;
+        private readonly GameInputThreadProcessor GameInputThreadProcessor;
+        private readonly BoardFileParser BoardFileParser;
 
         public int TickPeriod { get; set; }
 
-        public GameProcessor(ConsoleBoardDisplayer consoleBoardDisplayer, GameInputThreadProcessor gameInputThreadProcessor, int tickPeriod)
+        public GameProcessor(ConsoleBoardDisplayer consoleBoardDisplayer, GameInputThreadProcessor gameInputThreadProcessor, BoardFileParser boardParser, int tickPeriod)
         {
             ConsoleBoardDisplayer = consoleBoardDisplayer;
             GameInputThreadProcessor = gameInputThreadProcessor;
+            BoardFileParser = boardParser;
             
             InitializeNewGame(tickPeriod);
             
@@ -26,7 +26,10 @@ namespace kata_pacman
         
         public void InitializeNewGame(int tickPeriod)
         {
-            GameState = new GameState();
+
+            IGameTile[,] board = BoardFileParser.ParseBoardCsvFile("../../../maze.csv");
+            
+            GameState = new GameState(board, new Coordinate((int)Math.Round(board.GetLength(0)/2.0), (int)Math.Round(board.GetLength(1)/2.0)));
             TickPeriod = tickPeriod;
             
             var pacmanCharacterProcessor = new CharacterProcessor(new PacmanCharacterInteractionProcessor(), new PacmanGameTileInteractionProcessor(), this);   
@@ -36,9 +39,9 @@ namespace kata_pacman
             
             var ghostCharacterProcessor = new CharacterProcessor(new GhostCharacterInteractionProcessor(), new GhostGameTileInteractionProcessor(), this);
             GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 1), Direction.East, ghostCharacterProcessor));
-            GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(2, 2), Direction.West, ghostCharacterProcessor));
+            GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 2), Direction.West, ghostCharacterProcessor));
             
-            GameState.GameCharacterSet.Add(new SmartGhostCharacter(new Coordinate(3, 4), Direction.East, ghostCharacterProcessor, GameState));
+            GameState.GameCharacterSet.Add(new SmartGhostCharacter(new Coordinate(2, 1), Direction.East, ghostCharacterProcessor, GameState));
         } 
 
         public void RunGame()
@@ -51,8 +54,8 @@ namespace kata_pacman
                 {
                     character.ProcessCharacter();
                 }                
+                
                 ConsoleBoardDisplayer.DisplayConsoleBoard(GameState);
-
                 Tick();
 
             }

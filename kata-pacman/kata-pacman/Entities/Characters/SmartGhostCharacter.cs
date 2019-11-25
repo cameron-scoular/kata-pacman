@@ -16,7 +16,7 @@ namespace kata_pacman.Characters
         {
             Position = spawnPosition;
             Direction = spawnDirection;
-            RenderSymbol = 'G';
+            RenderSymbol = 'S';
             CharacterProcessor = characterProcessor;
             GameState = gameState;
         }
@@ -34,40 +34,22 @@ namespace kata_pacman.Characters
             var xDiff = playerPosition.XPos - Position.XPos;
             var yDiff = playerPosition.YPos - Position.YPos;
 
-            var possibleXDirection = Direction.North;
-            var possibleYDirection = Direction.East;
-
-            var random = new Random();
 
             if (xDiff > 0)
             {
-                possibleXDirection = Direction.South;
+                Direction = Direction.South;
             }else if (xDiff < 0)
             {
-                possibleXDirection = Direction.North;
+                Direction = Direction.North;
             }else if (yDiff > 0)
             {
-                possibleYDirection = Direction.East;
+                Direction = Direction.East;
             }
-            else
+            else if (yDiff < 0)
             {
-                possibleYDirection = Direction.West;
+                Direction = Direction.West;
             }
-
-            if (yDiff == 0)
-            {
-                Direction = possibleXDirection;
-            }else if (xDiff == 0)
-            {
-                Direction = possibleYDirection;
-            }else if (random.NextDouble() < 0.5)
-            {
-                Direction = possibleXDirection;
-            }
-            else
-            {
-                Direction = possibleYDirection;
-            }
+            
 
         }
 
