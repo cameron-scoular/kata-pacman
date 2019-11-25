@@ -45,9 +45,9 @@ namespace kata_pacman.Characters
             
                 var newDirection = GetNewDirection(input);
 
-                var adjacentGameObject = gameState.BoardState.GetAdjacentGameTile(Position, newDirection);
+                var adjacentGameTile = gameState.BoardState.GetAdjacentGameTile(Position, newDirection);
 
-                if (adjacentGameObject.Passable) 
+                if (adjacentGameTile.Passable) 
                 {
                     Direction = newDirection;
                     RenderSymbol = GetRenderSymbolFromDirection(Direction);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace kata_pacman.Characters
 {
@@ -70,6 +71,25 @@ namespace kata_pacman.Characters
 
             }
             
+        }
+
+        public Dictionary<Direction, IGameTile> GetValidTileMoves(Coordinate position)
+        {
+            var adjacentTileDictionary = new Dictionary<Direction, IGameTile>();
+            adjacentTileDictionary.Add(Direction.North, GameState.BoardState.GetAdjacentGameTile(position, Direction.North));
+            adjacentTileDictionary.Add(Direction.East, GameState.BoardState.GetAdjacentGameTile(position, Direction.East));
+            adjacentTileDictionary.Add(Direction.South, GameState.BoardState.GetAdjacentGameTile(position, Direction.South));
+            adjacentTileDictionary.Add(Direction.West, GameState.BoardState.GetAdjacentGameTile(position, Direction.West));
+
+            foreach (var (direction, gameTile) in adjacentTileDictionary)
+            {
+                if (gameTile.Passable == false)
+                {
+                    adjacentTileDictionary.Remove(direction);
+                }
+            }
+            
+            return adjacentTileDictionary;
         }
         
         

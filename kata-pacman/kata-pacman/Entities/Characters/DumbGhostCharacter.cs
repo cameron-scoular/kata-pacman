@@ -12,6 +12,7 @@ namespace kata_pacman.Characters
         public GameState GameState { get; }
         public Coordinate Position { get; set; }
         public Direction Direction { get; set; }
+        public Direction PreviousDirection { get; set; }
         public char RenderSymbol { get; set; }
         
         public DumbGhostCharacter(Coordinate spawnPosition, Direction spawnDirection, ICharacterProcessor characterProcessor, GameState gameState)
@@ -31,25 +32,16 @@ namespace kata_pacman.Characters
 
         public void ExecuteAiBehaviour()
         {
-            
-            var adjacentTileDictionary = new Dictionary<Direction, IGameTile>();
-            adjacentTileDictionary.Add(Direction.North, GameState.BoardState.GetAdjacentGameTile(Position, Direction.North));
-            adjacentTileDictionary.Add(Direction.East, GameState.BoardState.GetAdjacentGameTile(Position, Direction.East));
-            adjacentTileDictionary.Add(Direction.South, GameState.BoardState.GetAdjacentGameTile(Position, Direction.South));
-            adjacentTileDictionary.Add(Direction.West, GameState.BoardState.GetAdjacentGameTile(Position, Direction.West));
 
-            foreach (var (direction, gameTile) in adjacentTileDictionary)
-            {
-                if (gameTile.Passable == false)
-                {
-                    adjacentTileDictionary.Remove(direction);
-                }
-            }
+            var validAdjacentTileMoveDictionary = CharacterProcessor.GetValidTileMoves(Position);
             
             var random = new Random();
 
-            Direction = adjacentTileDictionary.ElementAt(random.Next(0, adjacentTileDictionary.Count)).Key;
-
+            if (!validAdjacentTileMoveDictionary.ContainsKey(Direction) || validAdjacentTileMoveDictionary.Count > 2 )
+            {
+                Direction = validAdjacentTileMoveDictionary.ElementAt(random.Next(0, validAdjacentTileMoveDictionary.Count)).Key;
+            }
+            
         }
         
     }
