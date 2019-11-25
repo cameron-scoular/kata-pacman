@@ -38,8 +38,8 @@ namespace kata_pacman
             GameState.GameCharacterSet.Add(pacmanCharacter);
             
             var ghostCharacterProcessor = new CharacterProcessor(new GhostCharacterInteractionProcessor(), new GhostGameTileInteractionProcessor(), this);
-            GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 1), Direction.East, ghostCharacterProcessor));
-            GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 2), Direction.West, ghostCharacterProcessor));
+            GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 1), Direction.East, ghostCharacterProcessor, GameState));
+            GameState.GameCharacterSet.Add(new DumbGhostCharacter(new Coordinate(1, 2), Direction.West, ghostCharacterProcessor, GameState));
             
             GameState.GameCharacterSet.Add(new SmartGhostCharacter(new Coordinate(2, 1), Direction.East, ghostCharacterProcessor, GameState));
         } 
